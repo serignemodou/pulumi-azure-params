@@ -1,0 +1,28 @@
+name: Extract Azure Information
+description: Extract azure informations specific for each project on pulumi config 
+inputs:
+  stack-name: 
+    description: "STACK_NAME"
+    required: false
+outputs:
+  service-principal:
+    description: "Service Principal"
+    value: ${{ steps.extract_service_principal.outputs.service-principal }}
+  subscription-id:
+    description: "Subscription ID"
+    value: ${{ steps.extract_subscription_id.outputs.subscription-id }}
+runs:
+  using: composite
+  steps:
+    - name: Git chackout
+      uses: actions/checkout@v3
+    - id: extract_service_principal
+      name: Extract Service Principal
+      shell: bash
+      run: |
+        echo "service-principal=$(cat Pulumi.${{ inputs.stack-name }}.yaml | yq e '.config."az.servicePrincipalName"' | tr - _)" >> $GITHUB_OUTPUT
+    - id: extract_subscription_id
+      name: Extract Subscription ID
+      shell: bash
+      run: |
+        echo "subscription-id=$(cat Pulumi.${{ input.stack-name }}.yaml | yq e '.config."az.subscriptionID"' | tr - _)" >>$GITHUB_OUTPUT
