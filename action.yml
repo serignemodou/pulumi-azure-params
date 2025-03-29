@@ -25,4 +25,4 @@ runs:
       name: Extract Subscription ID
       shell: bash
       run: |
-        echo "subscription-id=$(cat Pulumi.${{ input.stack-name }}.yaml | yq e '.config."az.subscriptionID"' | tr - _)" >>$GITHUB_OUTPUT
+        echo "subscription-id=$(cat Pulumi.${{ inputs.stack-name }}.yaml | yq e '.config."az.subscriptionID"' | tr - _)" >>$GITHUB_OUTPUT
